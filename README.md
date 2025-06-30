@@ -1,9 +1,9 @@
-# Hong Kong Food Wholesale Prices MCP Server
+# Hong Kong Food Data MCP Server
 
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue.svg)](https://github.com/hkopenai/hk-food-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This is an MCP server that provides access to wholesale food price data through a FastMCP interface.
+This is an MCP server that provides access to food related data in Hong Kong through a FastMCP interface.
 
 ## Features
 

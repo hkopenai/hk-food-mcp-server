@@ -6,10 +6,10 @@ and Conservation Department (AFCD) website and filter it based on date range and
 """
 
 import csv
-import requests
 from io import StringIO
 from datetime import datetime
 from typing import List, Dict, Optional
+import requests
 from pydantic import Field
 from typing_extensions import Annotated
 

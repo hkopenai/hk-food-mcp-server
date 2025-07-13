@@ -7,7 +7,6 @@ to fetching and processing wholesale prices data.
 
 import unittest
 from unittest.mock import patch
-from io import StringIO
 from hkopenai.hk_food_mcp_server.tool_wholesale_prices_of_major_fresh_food import (
     fetch_wholesale_prices,
     filter_by_date_range,

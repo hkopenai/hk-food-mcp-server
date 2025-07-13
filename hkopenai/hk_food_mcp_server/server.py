@@ -5,11 +5,10 @@ This module provides functionality to configure and start the MCP server with to
 for accessing food-related data in Hong Kong.
 """
 
-import argparse
-from fastmcp import FastMCP
-from hkopenai.hk_food_mcp_server import tool_wholesale_prices_of_major_fresh_food
 from typing import Dict, List, Annotated, Optional
+from fastmcp import FastMCP
 from pydantic import Field
+from hkopenai.hk_food_mcp_server import tool_wholesale_prices_of_major_fresh_food
 
 
 def create_mcp_server():
@@ -37,7 +36,7 @@ def create_mcp_server():
     return mcp
 
 
-def main(args):
+def server(host: str, port: int, sse: bool):
     """
     Main function to run the MCP Server.
     
@@ -46,13 +45,9 @@ def main(args):
     """
     server = create_mcp_server()
 
-    if args.sse:
-        server.run(transport="streamable-http", host=args.host, port=args.port)
-        print(f"MCP Server running in SSE mode on port {args.port}, bound to {args.host}")
+    if sse:
+        server.run(transport="streamable-http", host=host, port=port)
+        print(f"MCP Server running in SSE mode on port {port}, bound to {host}")
     else:
         server.run()
         print("MCP Server running in stdio mode")
-
-
-if __name__ == "__main__":
-    main()

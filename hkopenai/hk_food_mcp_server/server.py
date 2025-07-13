@@ -15,23 +15,7 @@ def create_mcp_server():
     """Create and configure the MCP server"""
     mcp = FastMCP(name="HK OpenAI food Server")
 
-    @mcp.tool(
-        description="Daily wholesale prices of major fresh food in Hong Kong from Agriculture, Fisheries and Conservation Department"
-    )
-    def get_wholesale_prices(
-        start_date: Annotated[
-            Optional[str], Field(description="Start date in DD/MM/YYYY format")
-        ] = None,
-        end_date: Annotated[
-            Optional[str], Field(description="End date in DD/MM/YYYY format")
-        ] = None,
-        language: Annotated[
-            str, Field(description="Language for output (en/zh)", pattern="^(en|zh)$")
-        ] = "en",
-    ) -> List[Dict]:
-        return tool_wholesale_prices_of_major_fresh_food.get_wholesale_prices(
-            start_date, end_date, language
-        )
+    tool_wholesale_prices_of_major_fresh_food.register(mcp)
 
     return mcp
 

@@ -9,13 +9,45 @@ import csv
 from io import StringIO
 from datetime import datetime
 from typing import List, Dict, Optional
+
 import requests
 from pydantic import Field
 from typing_extensions import Annotated
 
+
 WHOLESALE_PRICES_URL = (
     "https://www.afcd.gov.hk/english/agriculture/agr_fresh/files/Wholesale_Prices.csv"
 )
+
+
+def register(mcp):
+    """Registers the wholesale prices tool with the FastMCP server."""
+
+    @mcp.tool(
+        description="Daily wholesale prices of major fresh food in Hong Kong from Agriculture, Fisheries and Conservation Department"
+    )
+    def get_wholesale_prices(
+        start_date: Annotated[
+            Optional[str], Field(description="Start date in DD/MM/YYYY format")
+        ] = None,
+        end_date: Annotated[
+            Optional[str], Field(description="End date in DD/MM/YYYY format")
+        ] = None,
+        language: Annotated[
+            str, Field(description="Language for output (en/zh)", pattern="^(en|zh)$")
+        ] = "en",
+    ) -> List[Dict]:
+        """Get daily wholesale prices of major fresh food in Hong Kong
+
+        Args:
+            start_date: Optional start date for filtering (DD/MM/YYYY)
+            end_date: Optional end date for filtering (DD/MM/YYYY)
+            language: Output language (en for English, zh for Chinese)
+
+        Returns:
+            List of wholesale price records with selected language fields
+        """
+        return _get_wholesale_prices(start_date, end_date, language)
 
 
 def fetch_wholesale_prices() -> List[Dict]:
@@ -63,7 +95,7 @@ def filter_by_date_range(
     return filtered
 
 
-def get_wholesale_prices(
+def _get_wholesale_prices(
     start_date: Annotated[
         Optional[str], Field(description="Start date in DD/MM/YYYY format")
     ] = None,

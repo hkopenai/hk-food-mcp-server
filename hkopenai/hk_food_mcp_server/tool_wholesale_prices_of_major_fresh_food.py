@@ -1,7 +1,7 @@
 """
 Module for fetching and processing wholesale prices of major fresh food in Hong Kong.
 
-This module provides functionality to retrieve data from the Agriculture, Fisheries 
+This module provides functionality to retrieve data from the Agriculture, Fisheries
 and Conservation Department (AFCD) website and filter it based on date range and language.
 """
 

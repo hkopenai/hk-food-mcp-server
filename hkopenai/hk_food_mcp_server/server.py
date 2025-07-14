@@ -5,9 +5,7 @@ This module provides functionality to configure and start the MCP server with to
 for accessing food-related data in Hong Kong.
 """
 
-from typing import Dict, List, Annotated, Optional
 from fastmcp import FastMCP
-from pydantic import Field
 from hkopenai.hk_food_mcp_server import tool_wholesale_prices_of_major_fresh_food
 
 
@@ -23,7 +21,7 @@ def create_mcp_server():
 def server(host: str, port: int, sse: bool):
     """
     Main function to run the MCP Server.
-    
+
     Args:
         args: Command line arguments passed to the function.
     """

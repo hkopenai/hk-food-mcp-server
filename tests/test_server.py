@@ -12,12 +12,15 @@ from hkopenai.hk_food_mcp_server.server import create_mcp_server
 class TestApp(unittest.TestCase):
     """
     Test class for verifying MCP server creation and tool integration.
-    
+
     This class contains test cases to ensure the server is properly initialized
     and that tools are correctly registered and functional.
     """
+
     @patch("hkopenai.hk_food_mcp_server.server.FastMCP")
-    @patch("hkopenai.hk_food_mcp_server.tool_wholesale_prices_of_major_fresh_food.register")
+    @patch(
+        "hkopenai.hk_food_mcp_server.tool_wholesale_prices_of_major_fresh_food.register"
+    )
     def test_create_mcp_server(self, mock_register, mock_fastmcp):
         """
         Test the creation of the MCP server and tool registration.

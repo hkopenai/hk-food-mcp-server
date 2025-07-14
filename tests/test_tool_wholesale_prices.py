@@ -18,10 +18,11 @@ from hkopenai.hk_food_mcp_server.tool_wholesale_prices_of_major_fresh_food impor
 class TestWholesalePrices(unittest.TestCase):
     """
     Test class for verifying the functionality of wholesale prices tools.
-    
+
     This class contains test cases to ensure the correct fetching, filtering,
     and processing of wholesale prices data.
     """
+
     CSV_DATA = """ENGLISH CATEGORY,中文類別,FRESH FOOD CATEGORY,鮮活食品類別,FOOD TYPE,食品種類,PRICE (THIS MORNING),價錢 (今早),UNIT,單位,INTAKE DATE,來貨日期,SOURCE OF SUPPLY (IF APPROPRIATE),供應來源 (如適用),PROVIDED BY,資料來源,Last Revision Date,最後更新日期
 Average Wholesale Prices,平均批發價,Livestock / Poultry,牲畜及家禽,Live pig,活豬,12.44,12.44,($ / Catty),(元／斤),(Yesterday),(昨日),-,-,Slaughterhouses,屠房,29/05/2025,29/05/2025
 Average Wholesale Prices,平均批發價,Livestock / Poultry,牲畜及家禽,Live cattle,活牛,是日沒有供應,是日沒有供應,($ / Catty),(元／斤),(Yesterday),(昨日),-,-,Ng Fung Hong,五豐行,30/05/2025,30/05/2025
@@ -32,7 +33,7 @@ Average Wholesale Prices,平均批發價,Marine fish,鹹水魚,Golden thread,紅
     def setUp(self):
         """
         Set up test environment before each test method.
-        
+
         Configures mock responses for HTTP requests to simulate data retrieval.
         """
         self.mock_requests = patch("requests.get").start()
@@ -43,7 +44,7 @@ Average Wholesale Prices,平均批發價,Marine fish,鹹水魚,Golden thread,紅
     def test_fetch_wholesale_prices(self):
         """
         Test fetching wholesale prices data.
-        
+
         Verifies that the data is correctly retrieved and parsed from the mock response.
         """
         result = fetch_wholesale_prices()
@@ -55,7 +56,7 @@ Average Wholesale Prices,平均批發價,Marine fish,鹹水魚,Golden thread,紅
     def test_filter_by_date_range(self):
         """
         Test filtering wholesale prices data by date range.
-        
+
         Verifies that the data is correctly filtered based on start and end dates.
         """
         data = fetch_wholesale_prices()
@@ -82,7 +83,7 @@ Average Wholesale Prices,平均批發價,Marine fish,鹹水魚,Golden thread,紅
     def test_get_wholesale_prices_english(self):
         """
         Test getting wholesale prices data in English.
-        
+
         Verifies that the data is correctly formatted for English output.
         """
         result = _get_wholesale_prices(language="en")
@@ -94,7 +95,7 @@ Average Wholesale Prices,平均批發價,Marine fish,鹹水魚,Golden thread,紅
     def test_get_wholesale_prices_chinese(self):
         """
         Test getting wholesale prices data in Chinese.
-        
+
         Verifies that the data is correctly formatted for Chinese output.
         """
         result = _get_wholesale_prices(language="zh")
@@ -106,7 +107,7 @@ Average Wholesale Prices,平均批發價,Marine fish,鹹水魚,Golden thread,紅
     def test_get_wholesale_prices_with_dates(self):
         """
         Test getting wholesale prices data with specific date range.
-        
+
         Verifies that the data is correctly filtered by the specified dates.
         """
         result = _get_wholesale_prices(start_date="30/05/2025", end_date="30/05/2025")
@@ -147,8 +148,12 @@ Average Wholesale Prices,平均批發價,Marine fish,鹹水魚,Golden thread,紅
         with patch(
             "hkopenai.hk_food_mcp_server.tool_wholesale_prices_of_major_fresh_food._get_wholesale_prices"
         ) as mock_get_wholesale_prices:
-            decorated_function(start_date="01/01/2023", end_date="31/01/2023", language="en")
-            mock_get_wholesale_prices.assert_called_once_with("01/01/2023", "31/01/2023", "en")
+            decorated_function(
+                start_date="01/01/2023", end_date="31/01/2023", language="en"
+            )
+            mock_get_wholesale_prices.assert_called_once_with(
+                "01/01/2023", "31/01/2023", "en"
+            )
 
 
 if __name__ == "__main__":

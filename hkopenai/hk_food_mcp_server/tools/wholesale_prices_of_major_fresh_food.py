@@ -5,14 +5,11 @@ This module provides functionality to retrieve data from the Agriculture, Fisher
 and Conservation Department (AFCD) website and filter it based on date range and language.
 """
 
-import csv
-from io import StringIO
-from datetime import datetime
 from typing import List, Dict, Optional
-
-import requests
+from datetime import datetime
 from pydantic import Field
 from typing_extensions import Annotated
+from hkopenai_common.csv_utils import fetch_csv_from_url
 
 
 WHOLESALE_PRICES_URL = (
@@ -36,7 +33,7 @@ def register(mcp):
         language: Annotated[
             str, Field(description="Language for output (en/zh)", pattern="^(en|zh)$")
         ] = "en",
-    ) -> List[Dict]:
+    ) -> List[Dict] | Dict:
         """Get daily wholesale prices of major fresh food in Hong Kong
 
         Args:
@@ -50,27 +47,7 @@ def register(mcp):
         return _get_wholesale_prices(start_date, end_date, language)
 
 
-def fetch_wholesale_prices() -> List[Dict]:
-    """Fetch wholesale prices data from AFCD website"""
-    response = requests.get(WHOLESALE_PRICES_URL)
-    csv_data = StringIO(response.text)
-
-    # Read first line to get headers
-    headers = csv_data.readline().strip().split(",")
-
-    # Filter out any rows that match the header pattern
-    filtered_rows = []
-    for line in csv_data:
-        if not line.strip() or line.strip().split(",") == headers:
-            continue  # Skip empty lines or header duplicates
-        filtered_rows.append(line)
-
-    # Create DictReader from filtered data
-    reader = csv.DictReader(StringIO("".join(filtered_rows)), fieldnames=headers)
-    return list(reader)
-
-
-def filter_by_date_range(
+def _filter_by_date_range(
     data: List[Dict], start_date: Optional[str], end_date: Optional[str]
 ) -> List[Dict]:
     """Filter data by date range"""
@@ -105,7 +82,7 @@ def _get_wholesale_prices(
     language: Annotated[
         str, Field(description="Language for output (en/zh)", pattern="^(en|zh)$")
     ] = "en",
-) -> List[Dict]:
+) -> List[Dict] | Dict:
     """Get daily wholesale prices of major fresh food in Hong Kong
 
     Args:
@@ -116,8 +93,10 @@ def _get_wholesale_prices(
     Returns:
         List of wholesale price records with selected language fields
     """
-    data = fetch_wholesale_prices()
-    filtered_data = filter_by_date_range(data, start_date, end_date)
+    data = fetch_csv_from_url(WHOLESALE_PRICES_URL)
+    if "error" in data:
+        return {"type": "Error", "error": data["error"]}
+    filtered_data = _filter_by_date_range(data, start_date, end_date)
 
     # Select appropriate columns based on language
     if language == "zh":
